@@ -9,7 +9,7 @@
   }
 
   .side-nav-light {
-    @apply bg-[#FED7AA] border-r border-gray-200;
+    @apply bg-orange-50 border-r border-orange-200;
   }
 
   .side-nav-dark {
@@ -17,6 +17,6 @@
   }
 
   .side-nav-bg {
-    @apply border-r bg-[#FFFAF5] border-gray-200 dark:bg-gray-900 dark:border-gray-800;
+    @apply border-r bg-orange-50 border-orange-200 dark:bg-gray-900 dark:border-gray-800;
   }
 }

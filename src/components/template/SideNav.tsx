@@ -1,5 +1,5 @@
 import classNames from '@/utils/classNames'
-import ScrollBar from '@/components/ui/ScrollBar'
+
 import Logo from '@/components/template/Logo'
 import VerticalMenuContent from '@/components/template/VerticalMenuContent'
 import { useThemeStore } from '@/store/themeStore'
@@ -44,9 +44,9 @@ const SideNav = ({
 
     return (
         <div
-            style={sideNavStyle}
+            style={{ ...sideNavStyle, top: HEADER_HEIGHT, height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
             className={classNames(
-                'side-nav',
+                'side-nav sticky',
                 background && 'side-nav-bg',
                 className,
             )}
@@ -64,7 +64,7 @@ const SideNav = ({
                 />
             </Link> */}
             <div className={classNames('side-nav-content', contentClass)}>
-                <ScrollBar style={{ height: '100%' }} direction={direction}>
+                <div className="h-full overflow-y-auto">
                     <VerticalMenuContent
                         navigationTree={navigationConfig}
                         routeKey={currentRouteKey}
@@ -72,7 +72,7 @@ const SideNav = ({
                         translationSetup={translationSetup}
                         userAuthority={userAuthority || []}
                     />
-                </ScrollBar>
+                </div>
             </div>
         </div>
     )
