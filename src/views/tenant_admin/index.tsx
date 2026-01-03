@@ -1,8 +1,8 @@
 import React from 'react'
-import StatisticCard from '@/components/custom/StatisticCard'
-import DashboardChart from '@/components/custom/DashboardChart'
-import LiveOnlineOrders1 from '@/components/custom/LiveOnlineOrders'
-import RecentOrders1 from '@/components/custom/RecentOrders'
+import StatisticCard from '@/views/tenant_admin/components/dashboard/StatisticCard'
+import DashboardChart from '@/views/tenant_admin/components/dashboard/DashboardChart'
+import LiveOnlineOrders1 from '@/views/tenant_admin/components/dashboard/LiveOnlineOrders'
+import RecentOrders1 from '@/views/tenant_admin/components/dashboard/RecentOrders'
 import {
     Select,
     SelectContent,

@@ -14,12 +14,6 @@ const Layout = ({ children }: CommonProps) => {
 
     const location = useLocation()
 
-    const isNoLayoutRoute = location.pathname === '/components'
-
-    if (isNoLayoutRoute) {
-        return <>{children}</>
-    }
-
     return (
         <Suspense
             fallback={
@@ -28,7 +22,9 @@ const Layout = ({ children }: CommonProps) => {
                 </div>
             }
         >
-            {authenticated ? (
+            {location.pathname.startsWith('/library') ? (
+                <>{children}</>
+            ) : authenticated ? (
                 <PostLoginLayout layoutType={layoutType}>
                     {children}
                 </PostLoginLayout>

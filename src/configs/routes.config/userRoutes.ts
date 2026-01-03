@@ -4,12 +4,6 @@ import type { Routes } from '@/@types/routes'
 
 const userRoutes: Routes = [
     {
-        key: 'library',
-        path: '/library',
-        component: lazy(() => import('@/views/library/Components')),
-        authority: [USER],
-    },
-    {
         key: 'singleMenuItem',
         path: '/single-menu-view',
         component: lazy(() => import('@/views/demo/SingleMenuView')),

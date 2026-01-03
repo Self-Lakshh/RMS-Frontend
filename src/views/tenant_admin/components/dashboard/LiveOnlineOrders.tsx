@@ -3,8 +3,8 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/shadcn/u
 import { Separator } from '@/components/shadcn/ui/separator'
 import { Badge } from '@/components/shadcn/ui/badge'
 import { Check, Timer, X } from 'lucide-react'
-import { cn } from '../shadcn/utils'
-import { Button } from '../ui'
+import { cn } from '../../../../components/shadcn/utils'
+import { Button } from '../../../../components/ui'
 
 export type OrderItem = {
     name: string
