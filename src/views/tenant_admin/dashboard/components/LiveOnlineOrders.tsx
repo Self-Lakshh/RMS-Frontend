@@ -4,7 +4,7 @@ import { Separator } from '@/components/shadcn/ui/separator'
 import { Badge } from '@/components/shadcn/ui/badge'
 import { Check, Timer, X } from 'lucide-react'
 import { cn } from '../../../../components/shadcn/utils'
-import { Button } from '../../../../components/ui'
+import { Button } from '@/components/shadcn/ui/button'
 
 export type OrderItem = {
     name: string
@@ -23,7 +23,7 @@ export type OnlineCardProps = {
     className?: string
 }
 
-const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
+const LiveOnlineOrders: React.FC<OnlineCardProps> = memo(
     ({
         orderId,
         platform,
@@ -40,23 +40,20 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
             .join(', ')
         return (
             <>
-                <Card className={cn("rounded-xl shadow-sm border border-teal-200",
-                    "hover:shadow-md transition-shadow",
+                <Card style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 3px 0px 1px' }} className={cn("rounded-xl border shadow-md",
                     className)}>
-                    <CardHeader className="flex flex-row items-center justify-between pb-3">
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold text-lg text-gray-900">
+                    <CardHeader className="flex p-4 pb-2 flex-row items-start justify-between">
+                        <div className='flex items-center gap-4'>
+                            <span className="font-semibold text-base">
                                 {orderId}
                             </span>
+                            <Badge
+                                variant="outline"
+                                className="bg-red-100 rounded-full text-red-600">
+                                {platform}
+                            </Badge>
                         </div>
-
-                        <Badge
-                            variant="outline"
-                            className="bg-red-100 text-red-600">
-                            {platform}
-                        </Badge>
-
-                        <div className="font-bold text-xl text-gray-900">
+                        <div className="font-bold text-base">
                             {currency}
                             {amount.toFixed(2)}
                         </div>
@@ -64,18 +61,18 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
 
                     <Separator />
 
-                    <CardContent className="py-4">
-                        <p className="text-teal-600 text-sm font-medium">
+                    <CardContent className="py-4 overflow-hidden max-h-20">
+                        <p className="text-teal-600 text-sm line-clamp-2 overflow-hidden font-medium">
                             {itemSummary}
                         </p>
                     </CardContent>
 
                     <Separator />
 
-                    <CardFooter className="flex items-center justify-between pt-3">
-                        <div className="flex items-center gap-2 text-teal-600">
+                    <CardFooter className="flex p-3 items-center justify-between">
+                        <div className="flex items-center gap-2  text-teal-600">
                             <Timer className="w-4 h-4" />
-                            <span className="text-sm">
+                            <span className="text-sm ">
                                 {placedAgo}
                             </span>
                         </div>
@@ -83,15 +80,15 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
                         <div className="flex gap-2">
 
                             <Button
-                                variant="default"
-                                className="bg-red-100 text-red-600"
+                                variant="outline"
+                                className="bg-red-100 p-2.5 text-red-600 hover:bg-red-200 shadow-none"
                                 onClick={() => onReject(orderId)}>
                                 <X className="w-4 h-4" />
                             </Button>
 
                             <Button
-                                variant="default"
-                                className="bg-green-100 text-green-600"
+                                variant="outline"
+                                className="bg-green-600 p-3 text-primary-foreground hover:bg-green-600/90 hover:text-primary-foreground shadow-none"
                                 onClick={() => onAccept(orderId)}>
                                 <span className="flex items-center gap-1">
                                     <Check className="w-4 h-4" />
@@ -106,4 +103,4 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
     },
 )
 
-export default LiveOnlineOrders1
+export default LiveOnlineOrders

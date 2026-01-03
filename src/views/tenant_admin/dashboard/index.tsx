@@ -1,3 +1,4 @@
+import { Card } from '@/components/shadcn/ui/card'
 import {
     Select,
     SelectContent,
@@ -5,167 +6,163 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/shadcn/ui/select'
-import { ChartNoAxesCombined, RotateCcw } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 import DashboardChart from './components/DashboardChart'
-import LiveOnlineOrders1 from './components/LiveOnlineOrders'
-import RecentOrders1 from './components/RecentOrders'
+import LiveOnlineOrder from './components/LiveOnlineOrders'
+import RecentOrder from './components/RecentOrders'
+import StatCard from './components/StatCard'
 import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
 import Loading from '@/components/shared/Loading'
+import { useState } from 'react'
+import RefetchLoader from '@/components/custom/RefetchLoader'
 
 const TenantAdminDashboard = () => {
     const { data, isLoading, isError, refetch } = useTenantDashboard()
     const { acceptOrder, rejectOrder } = useOrderActions()
+    const [isRefetching, setIsRefetching] = useState(false)
+    const [isOnlineOrdersRefetching, setIsOnlineOrdersRefetching] = useState(false)
 
-    if (isLoading) {
-        return <div className="flex h-full items-center justify-center min-h-[400px]"><Loading loading={true} /></div>
+    const handleRefetch = () => {
+        setIsRefetching(true)
+        refetch()
+        setTimeout(() => {
+            setIsRefetching(false)
+        }, 1000)
     }
 
+    const handleOnlineOrdersRefetch = () => {
+        setIsOnlineOrdersRefetching(true)
+        refetch()
+        setTimeout(() => {
+            setIsOnlineOrdersRefetching(false)
+        }, 1000)
+    }
+
+    if (isLoading) {
+        return (
+            <div className="flex h-full items-center justify-center min-h-[400px]">
+                <Loading loading={true} />
+            </div>
+        )
+    }
     if (isError || !data) {
-        return <div className="text-center text-red-500 p-10">Error loading dashboard data.</div>
+        return (
+            <div className="text-center text-destructive p-10">
+                Error loading dashboard data.
+            </div>
+        )
     }
 
     const { stats, onlineOrders, recentOrders } = data
 
     return (
-        <div className="space-y-6">
-            {/* Main Content: Chart + Online Orders */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Chart Area */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-card rounded-lg">
-                        <div className="flex items-center border-b border-gray-200 px-4 py-2 justify-between">
-                            <h3 className="text-base font-bold">Status</h3>
-
-                            <div className="flex items-center gap-2">
-                                <Select>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Last 30 Days" />
+        <div className='space-y-4'>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[82.5vh] overflow-hidden">
+                <div className="lg:col-span-2 space-y-4">
+                    <div className="bg-card border rounded-md">
+                        <div className="flex items-center justify-between px-4 py-2 border-b ">
+                            <h2 className="text-lg font-bold text-foreground">Status</h2>
+                            <div className="flex items-center gap-4">
+                                <Select defaultValue="30days">
+                                    <SelectTrigger className="w-[140px]">
+                                        <SelectValue placeholder="Period" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="today">
-                                            Today
-                                        </SelectItem>
-                                        <SelectItem value="yesterday">
-                                            Yesterday
-                                        </SelectItem>
-                                        <SelectItem value="this-week">
-                                            This Week
-                                        </SelectItem>
-                                        <SelectItem value="this-month">
-                                            This Month
-                                        </SelectItem>
-                                        <SelectItem value="this-year">
-                                            This Year
-                                        </SelectItem>
+                                        <SelectItem value="today">Today</SelectItem>
+                                        <SelectItem value="yesterday">Yesterday</SelectItem>
+                                        <SelectItem value="week">This Week</SelectItem>
+                                        <SelectItem value="30days">Last 30 Days</SelectItem>
+                                        <SelectItem value="year">This Year</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <div
-                                    className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
-                                    onClick={() => refetch()}
-                                >
-                                    <RotateCcw size={18} />
-                                </div>
+                                <RefetchLoader isRefetching={isRefetching} handleRefetch={handleRefetch} />
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-4">
-                            {/* Total Revenue */}
-                            <div className="p-4">
-                                <p className="text-gray-500 mb-1">
-                                    Total Revenue
-                                </p>
-                                <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    {stats.totalRevenue.toLocaleString()}{' '}
-                                    <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + {stats.totalRevenueGrowth}%
-                                    </span>
-                                </p>
-                            </div>
-                            {/* Profit Vs Goal */}
-                            <div className="p-4">
-                                <p className="text-gray-500 mb-1">
-                                    Profit Vs Goal
-                                </p>
-                                <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    {stats.profitVsGoal}%{' '}
-                                    <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + {stats.profitVsGoalGrowth}%
-                                    </span>
-                                </p>
-                            </div>
-                            {/* Money Lost */}
-                            <div className="p-4">
-                                <p className="text-gray-500 mb-1">Money Lost</p>
-                                <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    ₹{(stats.moneyLost / 100000).toFixed(1)}L{' '}
-                                    <span className="text-gray-500 font-normal text-xs flex items-center gap-1">
-                                        Stock issues & low traffic
-                                    </span>
-                                </p>
-                            </div>
-                            {/* Item Sold */}
-                            <div className="p-4">
-                                <p className="text-gray-500 mb-1">Item Sold</p>
-                                <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    {stats.itemSold.toLocaleString()}{' '}
-                                    <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + {stats.itemSoldGrowth}%
-                                    </span>
-                                </p>
-                            </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <StatCard
+                                title="Total Revenue"
+                                value={stats.totalRevenue.toLocaleString()}
+                                className='border-r'
+                                trend={{
+                                    value: stats.totalRevenueGrowth,
+                                    isPositive: stats.totalRevenueGrowth > 0,
+                                }}
+                            />
+                            <StatCard
+                                title="Profit Vs Goal"
+                                value={`${stats.profitVsGoal}%`}
+                                className='border-r'
+                                trend={{
+                                    value: stats.profitVsGoalGrowth,
+                                    isPositive: stats.profitVsGoalGrowth > 0,
+                                }}
+                            />
+                            <StatCard
+                                title="Money Lost"
+                                className='border-r'
+                                value={`₹${(stats.moneyLost / 100000).toFixed(1)}L`}
+                                subtitle="Stock issues & low traffic"
+                            />
+                            <StatCard
+                                title="Item Sold"
+                                value={stats.itemSold.toLocaleString()}
+                                trend={{
+                                    value: stats.itemSoldGrowth,
+                                    isPositive: stats.itemSoldGrowth > 0,
+                                }}
+                            />
                         </div>
                     </div>
-                    <DashboardChart />
+                    <DashboardChart className='border h-full' />
                 </div>
 
-                {/* Right Live Orders Column */}
-                <div className="lg:col-span-1 bg-card flex rounded-lg flex-col">
-                    <div className="flex items-center p-2 rounded-t-lg  px-4 bg-blue-100 justify-between">
-                        <h3 className="text-base font-normal text-gray-900">
+                {/* Live Online Orders */}
+                <div className="flex flex-col bg-card rounded-lg border overflow-scroll border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center justify-between rounded-t-lg p-3 border-b bg-blue-100 dark:bg-blue-950/70">
+                        <h3 className="text-base font-semibold text-foreground">
                             Live Online Orders
                         </h3>
-                        <div
-                            className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
-                            onClick={() => refetch()}
-                        >
-                            <RotateCcw size={18} />
-                        </div>
+                        <RefetchLoader isRefetching={isOnlineOrdersRefetching} handleRefetch={handleOnlineOrdersRefetch} />
                     </div>
 
-                    <div className="overflow-x-auto p-4 space-y-4">
-                        {onlineOrders.map((order) => (
-                            <LiveOnlineOrders1
-                                key={order.orderId}
-                                {...order}
-                                onAccept={(id) => acceptOrder(id)}
-                                onReject={(id) => rejectOrder(id)}
-                            />
-                        ))}
+                    <div className="overflow-y-auto p-4 space-y-4 flex-1">
+                        {onlineOrders.length === 0 ? (
+                            <div className="text-center text-muted-foreground py-8">
+                                No online orders at the moment
+                            </div>
+                        ) : (
+                            onlineOrders.map((order) => (
+                                <LiveOnlineOrder
+                                    key={order.orderId}
+                                    {...order}
+                                    onAccept={(id) => acceptOrder(id)}
+                                    onReject={(id) => rejectOrder(id)}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
 
             {/* Recent Orders Section */}
-            <div className="bg-orange-50/50 p-6 rounded-2xl border border-orange-100">
-                <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-bold text-lg text-gray-900">
-                        Recent Orders
-                    </h3>
-                    <div
-                        className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
-                        onClick={() => refetch()}
-                    >
-                        <RotateCcw size={18} />
-                    </div>
+            <div className="bg-card border rounded-lg border-orange-200 dark:border-orange-800">
+                <div className="flex items-center justify-between bg-orange-100 rounded-t-lg p-4">
+                    <h3 className="font-bold text-lg text-foreground">Recent Orders</h3>
+                    <RefetchLoader isRefetching={isRefetching} handleRefetch={handleRefetch} />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 overflow-x-auto pb-2">
-                    {recentOrders.map((order, idx) => (
-                        <RecentOrders1
-                            key={`${order.orderId}-${idx}`}
-                            {...order}
-                        />
-                    ))}
-                </div>
+                {recentOrders.length === 0 ? (
+                    <div className="text-center text-muted-foreground py-8">
+                        No recent orders
+                    </div>
+                ) : (
+                    <div className="p-4 flex flex-row shrink-0 overflow-scroll gap-4">
+                        {recentOrders.map((order, idx) => (
+                            <RecentOrder key={`${order.orderId}-${idx}`} {...order} />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

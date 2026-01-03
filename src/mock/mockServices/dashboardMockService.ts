@@ -44,6 +44,16 @@ const mockData: DashboardData = {
             ],
             placedAgo: '8 minutes ago',
         },
+         {
+            orderId: 'ZOM-4337',
+            platform: 'Zomato',
+            amount: 12.5,
+            items: [
+                { name: 'Veg Burger', quantity: 2 },
+                { name: 'Fries', quantity: 1 },
+            ],
+            placedAgo: '8 minutes ago',
+        },
     ],
     recentOrders: [
         {
