@@ -1,4 +1,3 @@
-
 import {
     Select,
     SelectContent,
@@ -10,102 +9,23 @@ import { ChartNoAxesCombined, RotateCcw } from 'lucide-react'
 import DashboardChart from './components/DashboardChart'
 import LiveOnlineOrders1 from './components/LiveOnlineOrders'
 import RecentOrders1 from './components/RecentOrders'
-
-// Mock Data
-const onlineOrders = [
-    {
-        orderId: 'ZOM-4335',
-        platform: 'Zomato',
-        amount: 23.55,
-        items: [
-            { name: 'Butter Chicken', quantity: 1 },
-            { name: 'Naan Bread', quantity: 2 },
-            { name: 'Biryani', quantity: 1 },
-        ],
-        placedAgo: '2 minutes ago',
-    },
-    {
-        orderId: 'SGY-9921',
-        platform: 'Swiggy',
-        amount: 45.0,
-        items: [
-            { name: 'Paneer Tikka', quantity: 2 },
-            { name: 'Garlic Naan', quantity: 3 },
-        ],
-        placedAgo: '5 minutes ago',
-    },
-    {
-        orderId: 'ZOM-4336',
-        platform: 'Zomato',
-        amount: 12.5,
-        items: [
-            { name: 'Veg Burger', quantity: 2 },
-            { name: 'Fries', quantity: 1 },
-        ],
-        placedAgo: '8 minutes ago',
-    },
-]
-
-const recentOrders = [
-    {
-        orderId: '0042',
-        orderType: 'Dine-in',
-        tableNumber: 'Table 12',
-        amount: 23.98,
-        status: 'Preparing',
-        placedAgo: '2 minutes ago',
-        items: [
-            { name: 'Butter Chicken', quantity: 1 },
-            { name: 'Naan Bread', quantity: 2 },
-            { name: 'Biryani', quantity: 1 },
-            { name: 'Butter Chicken', quantity: 1 },
-            { name: 'Naan Bread', quantity: 2 },
-            { name: 'Biryani', quantity: 1 },
-        ],
-    },
-    {
-        orderId: '0043',
-        orderType: 'Dine-in',
-        tableNumber: 'Table 08',
-        amount: 55.2,
-        status: 'Preparing',
-        placedAgo: '5 minutes ago',
-        items: [
-            { name: 'Paneer Masala', quantity: 2 },
-            { name: 'Roti', quantity: 4 },
-        ],
-    },
-    {
-        orderId: '0044',
-        orderType: 'Takeaway',
-        tableNumber: '-',
-        amount: 18.5,
-        status: 'Ready',
-        placedAgo: '12 minutes ago',
-        items: [
-            { name: 'Chicken Wrap', quantity: 2 },
-            { name: 'Coke', quantity: 2 },
-        ],
-    },
-    {
-        orderId: '0042',
-        orderType: 'Dine-in',
-        tableNumber: 'Table 12',
-        amount: 23.98,
-        status: 'Preparing',
-        placedAgo: '2 minutes ago',
-        items: [
-            { name: 'Butter Chicken', quantity: 1 },
-            { name: 'Naan Bread', quantity: 2 },
-            { name: 'Biryani', quantity: 1 },
-            { name: 'Butter Chicken', quantity: 1 },
-            { name: 'Naan Bread', quantity: 2 },
-            { name: 'Biryani', quantity: 1 },
-        ],
-    },
-]
+import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
+import Loading from '@/components/shared/Loading'
 
 const TenantAdminDashboard = () => {
+    const { data, isLoading, isError, refetch } = useTenantDashboard()
+    const { acceptOrder, rejectOrder } = useOrderActions()
+
+    if (isLoading) {
+        return <div className="flex h-full items-center justify-center min-h-[400px]"><Loading loading={true} /></div>
+    }
+
+    if (isError || !data) {
+        return <div className="text-center text-red-500 p-10">Error loading dashboard data.</div>
+    }
+
+    const { stats, onlineOrders, recentOrders } = data
+
     return (
         <div className="space-y-6">
             {/* Main Content: Chart + Online Orders */}
@@ -139,7 +59,10 @@ const TenantAdminDashboard = () => {
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <div className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer">
+                                <div
+                                    className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => refetch()}
+                                >
                                     <RotateCcw size={18} />
                                 </div>
                             </div>
@@ -151,9 +74,9 @@ const TenantAdminDashboard = () => {
                                     Total Revenue
                                 </p>
                                 <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    12,000{' '}
+                                    {stats.totalRevenue.toLocaleString()}{' '}
                                     <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + 12%
+                                        <ChartNoAxesCombined size={8} /> + {stats.totalRevenueGrowth}%
                                     </span>
                                 </p>
                             </div>
@@ -163,9 +86,9 @@ const TenantAdminDashboard = () => {
                                     Profit Vs Goal
                                 </p>
                                 <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    85%{' '}
+                                    {stats.profitVsGoal}%{' '}
                                     <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + 12%
+                                        <ChartNoAxesCombined size={8} /> + {stats.profitVsGoalGrowth}%
                                     </span>
                                 </p>
                             </div>
@@ -173,7 +96,7 @@ const TenantAdminDashboard = () => {
                             <div className="p-4">
                                 <p className="text-gray-500 mb-1">Money Lost</p>
                                 <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    ₹8.9L{' '}
+                                    ₹{(stats.moneyLost / 100000).toFixed(1)}L{' '}
                                     <span className="text-gray-500 font-normal text-xs flex items-center gap-1">
                                         Stock issues & low traffic
                                     </span>
@@ -183,9 +106,9 @@ const TenantAdminDashboard = () => {
                             <div className="p-4">
                                 <p className="text-gray-500 mb-1">Item Sold</p>
                                 <p className="text-2xl font-bold text-[#1D3582] flex items-center gap-1">
-                                    45,680{' '}
+                                    {stats.itemSold.toLocaleString()}{' '}
                                     <span className="text-primary-mild/80 text-xs flex items-center gap-1">
-                                        <ChartNoAxesCombined size={8} /> + 12%
+                                        <ChartNoAxesCombined size={8} /> + {stats.itemSoldGrowth}%
                                     </span>
                                 </p>
                             </div>
@@ -200,7 +123,10 @@ const TenantAdminDashboard = () => {
                         <h3 className="text-base font-normal text-gray-900">
                             Live Online Orders
                         </h3>
-                        <div className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer">
+                        <div
+                            className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
+                            onClick={() => refetch()}
+                        >
                             <RotateCcw size={18} />
                         </div>
                     </div>
@@ -210,8 +136,8 @@ const TenantAdminDashboard = () => {
                             <LiveOnlineOrders1
                                 key={order.orderId}
                                 {...order}
-                                onAccept={(id) => console.log('Accept', id)}
-                                onReject={(id) => console.log('Reject', id)}
+                                onAccept={(id) => acceptOrder(id)}
+                                onReject={(id) => rejectOrder(id)}
                             />
                         ))}
                     </div>
@@ -224,7 +150,10 @@ const TenantAdminDashboard = () => {
                     <h3 className="font-bold text-lg text-gray-900">
                         Recent Orders
                     </h3>
-                    <div className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer">
+                    <div
+                        className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 cursor-pointer"
+                        onClick={() => refetch()}
+                    >
                         <RotateCcw size={18} />
                     </div>
                 </div>
