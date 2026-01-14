@@ -10,7 +10,7 @@ import { RotateCcw } from 'lucide-react'
 import DashboardChart from './components/DashboardChart'
 import LiveOnlineOrder from './components/LiveOnlineOrders'
 import RecentOrder from './components/RecentOrders'
-import StatCard from './components/StatCard'
+import StatCard from '../components/StatCard'
 import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
 import Loading from '@/components/shared/Loading'
 import { useState } from 'react'
@@ -58,7 +58,7 @@ const TenantAdminDashboard = () => {
     return (
         <div className='space-y-4'>
             <div className="gap-4 flex flex-col h-[70vh] md:h-[60vh]xl:h-[70vh] 2xl:h-[66vh] md:flex-row min-h-0">
-                <div className="flex-col hidden md:flex gap-4 flex-1 h-full min-h-0">
+                <div className="flex-col w-full hidden md:flex gap-4 flex-1 h-full min-h-0">
                     <div className="bg-card border rounded-md shrink-0">
                         <div className="flex items-center justify-between px-4 py-2 border-b ">
                             <h2 className="text-lg font-bold text-foreground">Status</h2>
@@ -119,7 +119,7 @@ const TenantAdminDashboard = () => {
                 </div>
 
                 {/* Live Online Orders */}
-                <div className="flex flex-col w-full xl:w-[30%] 2xl:w-[28%] bg-card rounded-lg border h-full min-h-0 border-blue-200 dark:border-blue-800">
+                <div className="flex flex-col md:w-[30%] xl:w-[30%] 2xl:w-[28%] bg-card rounded-lg border h-full min-h-0 border-blue-200 dark:border-blue-800">
                     <div className="flex items-center justify-between rounded-t-lg p-3 border-b bg-blue-100 dark:bg-blue-950/70">
                         <h3 className="text-base font-semibold text-foreground">
                             Live Online Orders
@@ -148,8 +148,10 @@ const TenantAdminDashboard = () => {
 
             {/* Recent Orders Section */}
             <div className="bg-card border rounded-lg border-orange-200 dark:border-orange-800">
-                <div className="flex items-center justify-between bg-orange-100 rounded-t-lg p-4">
-                    <h3 className="font-bold text-lg text-foreground">Recent Orders</h3>
+                <div className="flex items-center justify-between bg-orange-100 dark:bg-orange-950/70 rounded-t-lg p-3 border-b">
+                    <h3 className="text-base font-semibold text-foreground">
+                        Recent Orders
+                    </h3>
                     <RefetchLoader isRefetching={isRefetching} handleRefetch={handleRefetch} />
                 </div>
 

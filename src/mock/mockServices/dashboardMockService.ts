@@ -21,6 +21,9 @@ const mockData: DashboardData = {
                 { name: 'Butter Chicken', quantity: 1 },
                 { name: 'Naan Bread', quantity: 2 },
                 { name: 'Biryani', quantity: 1 },
+                { name: 'Butter Chicken', quantity: 1 },
+                { name: 'Naan Bread', quantity: 2 },
+                { name: 'Biryani', quantity: 1 },
             ],
             placedAgo: '2 minutes ago',
         },
@@ -44,7 +47,7 @@ const mockData: DashboardData = {
             ],
             placedAgo: '8 minutes ago',
         },
-         {
+        {
             orderId: 'ZOM-4337',
             platform: 'Zomato',
             amount: 12.5,
