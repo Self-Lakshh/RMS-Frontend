@@ -8,6 +8,7 @@ import {
     CardFooter,
 } from '@/components/shadcn/ui/card'
 import { Button } from '@/components/shadcn/ui/button'
+import { Badge } from '@/components/shadcn/ui/badge'
 
 export type OrderItem = {
     name: string
@@ -52,24 +53,25 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
                 {/* HEADER */}
                 <CardHeader className="px-5 py-4">
                     <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-3">
                             <span className="text-lg font-bold text-foreground">
                                 #{orderId}
                             </span>
 
                             <div className="inline-flex items-center overflow-hidden rounded-lg border border-slate-200">
-                                <Button variant="ghost" className="border-r text-sm font-semibold text-foreground">
+                                <div className="px-3 py-0.5 text-sm font-semibold text-foreground border-r border-slate-200">
                                     {orderType}
-                                </Button>
-                                <Button variant="ghost" className="text-sm font-semibold text-blue-600">
+                                </div>
+                                <div className="px-3 py-0.5 text-sm font-semibold text-blue-600">
                                     {tableNumber}
-                                </Button>
+                                </div>
                             </div>
+
                         </div>
 
-                        <Button variant="secondary" className="rounded-full bg-orange-200 text-sm font-semibold text-orange-600">
+                        <Badge variant="secondary" className="shrink-0 rounded-full bg-orange-200 text-sm font-semibold text-orange-600">
                             {status}
-                        </Button>
+                        </Badge>
                     </div>
                 </CardHeader>
 
@@ -82,19 +84,21 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
 
                 {/* FOOTER */}
                 <CardFooter className="px-5 py-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex w-full items-center justify-between">
                         {/* Time at left */}
                         <div className="flex items-center gap-2 text-sm text-teal-500">
                             <Timer className="h-4 w-4" />
                             <span>{placedAgo}</span>
                         </div>
-                        {/* Currency at right */}
-                        <span className="flex text-lg font-semibold text-foreground">
+
+                        {/* Amount at right */}
+                        <span className="text-lg font-semibold text-foreground">
                             {currency}
                             {amount.toFixed(2)}
                         </span>
                     </div>
                 </CardFooter>
+
             </Card>
         )
     },
