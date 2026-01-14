@@ -6,7 +6,7 @@ import { OrderDetailModal } from './components/OrderDetailModal'
 import { useOrders } from '@/hooks/useOrder'
 import type { Order } from '@/@types/orders'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/ui/select'
-import StatCard from '../../dashboard/components/StatCard'
+import StatCard from '../../components/StatCard'
 import RefetchLoader from '@/components/custom/RefetchLoader'
 import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
 
@@ -67,7 +67,7 @@ const AllOrders = () => {
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                             <StatCard
                                 title="Total Revenue"
                                 value={stats.totalRevenue.toLocaleString()}

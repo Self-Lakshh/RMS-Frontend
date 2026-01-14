@@ -1,5 +1,13 @@
 import React, { memo } from 'react'
 import { Timer } from 'lucide-react'
+import { cn } from '../../../../components/shadcn/utils'
+import {
+    Card,
+    CardHeader,
+    CardContent,
+    CardFooter,
+} from '@/components/shadcn/ui/card'
+import { Button } from '@/components/shadcn/ui/button'
 
 export type OrderItem = {
     name: string
@@ -35,51 +43,59 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
             .join(', ')
 
         return (
-            <div
-                className={`bg-white border border-teal-300 min-w-full md:min-w-100 rounded-2xl shadow-[4px_0_0_0_#0000001A] px-5 py-4 ${className}`}
+            <Card
+                className={cn(
+                    'w-full min-w-full md:min-w-100 rounded-2xl border border-teal-300 bg-card shadow-[4px_0_0_0_#0000001A]',
+                    className,
+                )}
             >
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-lg text-gray-900">
-                            #{orderId}
-                        </span>
+                {/* HEADER */}
+                <CardHeader className="px-5 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-lg font-bold text-foreground">
+                                #{orderId}
+                            </span>
 
-                        <div className="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden ">
-                            <span className="px-3 py-1 text-sm font-semibold text-gray-800">
-                                Dine-in
-                            </span>
-                            <span className="border-l border-slate-200 h-7" />
-                            <span className="px-3 py-1 text-sm font-semibold text-blue-600">
-                                Table 12
-                            </span>
+                            <div className="inline-flex items-center overflow-hidden rounded-lg border border-slate-200">
+                                <Button variant="ghost" className="border-r text-sm font-semibold text-foreground">
+                                    {orderType}
+                                </Button>
+                                <Button variant="ghost" className="text-sm font-semibold text-blue-600">
+                                    {tableNumber}
+                                </Button>
+                            </div>
                         </div>
+
+                        <Button variant="secondary" className="rounded-full bg-orange-200 text-sm font-semibold text-orange-600">
+                            {status}
+                        </Button>
                     </div>
+                </CardHeader>
 
-                    {/* Status pill */}
-                    <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-600">
-                        {status}
-                    </span>
-                </div>
+                {/* ITEMS (exact border + padding behavior) */}
+                <CardContent className="px-4 py-3 border-y">
+                    <p className="text-sm leading-relaxed text-teal-600 line-clamp-2 min-h-12 max-h-12">
+                        {itemSummary}
+                    </p>
+                </CardContent>
 
-                {/* Items */}
-                <p className="mt-3 text-sm line-clamp-2 min-h-16 max-h-16 leading-relaxed text-teal-500 border-t border-b border-teal-300 py-3 -mx-5 px-5">
-                    {itemSummary}
-                </p>
-
-                {/* Footer */}
-                <div className="mt-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-teal-500">
-                        <Timer className="w-4 h-4" />
-                        <span>{placedAgo}</span>
+                {/* FOOTER */}
+                <CardFooter className="px-5 py-4">
+                    <div className="flex items-center justify-between">
+                        {/* Time at left */}
+                        <div className="flex items-center gap-2 text-sm text-teal-500">
+                            <Timer className="h-4 w-4" />
+                            <span>{placedAgo}</span>
+                        </div>
+                        {/* Currency at right */}
+                        <span className="flex text-lg font-semibold text-foreground">
+                            {currency}
+                            {amount.toFixed(2)}
+                        </span>
                     </div>
-
-                    <span className="text-lg font-semibold text-gray-900">
-                        {currency}
-                        {amount.toFixed(2)}
-                    </span>
-                </div>
-            </div>
+                </CardFooter>
+            </Card>
         )
     },
 )
