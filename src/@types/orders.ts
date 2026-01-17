@@ -1,14 +1,21 @@
+import {
+  OrderStatus,
+  OrderType,
+  PaymentMethod,
+  PaymentStatus,
+  OrderItemModifier,
+  OrderPricing,
+  ChargeLine,
+} from './shared'
+
+/**
+ * Order view types
+ */
 export type AllOrderType = 'live-orders' | 'kds-setup'
 
-export type OrderStatus = 'Pending' | 'Preparing' | 'Completed' | 'Cancelled'
-export type OrderPayment = 'Cash' | 'Card' | 'UPI'
-export type OrderPaymentStatus = 'Pending' | 'Paid' | 'Partially Paid' | 'Refunded'
-
-export interface OrderItemModifier {
-  label: string
-  price?: number
-}
-
+/**
+ * Order item with detailed pricing
+ */
 export interface OrderItem {
   name: string
   qty: number
@@ -18,16 +25,13 @@ export interface OrderItem {
   note?: string
 }
 
-export interface OrderChargeLine {
-  label: string
-  amount: number
-  emphasized?: boolean
-}
-
-export interface Order {
+/**
+ * Complete order details
+ */
+export interface Order extends OrderPricing {
   id: number
   orderCode?: string
-  type: 'Dine-in' | 'Takeaway' | 'Delivery'
+  type: OrderType
   table?: string
   seatingArea?: string
   customer: string
@@ -35,13 +39,12 @@ export interface Order {
   status: OrderStatus
   time: string
   amount: number
-  payment: OrderPayment
-  paymentStatus?: OrderPaymentStatus
+  payment: PaymentMethod
+  paymentStatus?: PaymentStatus
   paymentNote?: string
   items: OrderItem[]
-  value: number
-  tax: number
-  serviceCharge: number
-  total: number
-  charges?: OrderChargeLine[]
+  charges?: ChargeLine[]
 }
+
+// Re-export types for convenience
+export type { OrderStatus, PaymentMethod, PaymentStatus }
