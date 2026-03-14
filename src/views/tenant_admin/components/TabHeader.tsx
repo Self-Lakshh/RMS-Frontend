@@ -21,7 +21,7 @@ const TabsHeader = <T extends string>({
 }: Props<T>) => {
     return (
         <div className={cn('bg-card', className)}>
-            <Tabs value={value} onValueChange={(v) => onChange(v as T)}>
+            <Tabs value={value} onValueChange={(v: string) => onChange(v as T)}>
                 <TabsList>
                     {tabs.map((tab) => (
                         <TabsTrigger key={tab.value} value={tab.value}>

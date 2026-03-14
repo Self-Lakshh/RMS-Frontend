@@ -1,8 +1,9 @@
+import StaffPage from "./components/StaffPage"
+
 const Staffs = () => {
     return (
         <div className="justify-center items-center">
-            <h1>Staff Management Page</h1>
-            <p>Coming Soon...</p>
+            <StaffPage />
         </div>
     )
 }
